@@ -12,6 +12,9 @@ const CurrentPageWidget = ({
   setCurrentPage,
   addNote,
   deleteNote,
+  currentNote,
+  updatedNote,
+  setCurrentNote,
 
 }) => {
   switch (currentPage) {
@@ -20,12 +23,18 @@ const CurrentPageWidget = ({
         noteList={noteList} 
         setCurrentPage={setCurrentPage} 
         deleteNote={deleteNote}
+        setCurrentNote={setCurrentNote}
         />
     case 'add':
       // Berikan function "addNote" ke component "AddNote"
-      return <AddNote setCurrentPage={setCurrentPage} addNote={addNote} />
+      return <AddNote 
+        setCurrentPage={setCurrentPage} 
+        addNote={addNote} />
     case 'edit':
-      return <EditNote />
+      return <EditNote 
+        setCurrentPage={setCurrentPage}
+        updatedNote={updatedNote}
+        currentNote={currentNote} />
     default:
       return <Home />
   }
@@ -34,6 +43,8 @@ const CurrentPageWidget = ({
 const App = () => {
   // tetapkan home sebaga default screen
   const [currentPage, setCurrentPage] = useState('home')
+  //tetapkan current note sebagai chosen note
+  const [currentNote, setCurrentNote] = useState([])
 
   const [noteList, setNoteList] = useState([
     {
@@ -64,6 +75,20 @@ const App = () => {
     setNoteList(deleteNote)
   }
 
+  const updatedNote = (id, title, desc) => {
+    const updatedNote = noteList.map((note) => {
+      if (note.id === id) {
+        return {
+          id,
+          title,
+          desc,
+        }
+      }
+      return note
+    })
+    setNoteList(updatedNote)
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', marginTop: 32 }}>  
       <CurrentPageWidget
@@ -73,6 +98,11 @@ const App = () => {
         // Berikan function addNote sebagai prop
         addNote={addNote}
         deleteNote={deleteNote}
+
+        updatedNote={updatedNote}
+        currentNote={currentNote}
+        setCurrentNote={setCurrentNote}
+        
       />
     </SafeAreaView>
   );
