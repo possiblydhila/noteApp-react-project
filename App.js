@@ -11,10 +11,16 @@ const CurrentPageWidget = ({
   noteList,
   setCurrentPage,
   addNote,
+  deleteNote,
+
 }) => {
   switch (currentPage) {
     case 'home':
-      return <Home noteList={noteList} setCurrentPage={setCurrentPage} />
+      return <Home 
+        noteList={noteList} 
+        setCurrentPage={setCurrentPage} 
+        deleteNote={deleteNote}
+        />
     case 'add':
       // Berikan function "addNote" ke component "AddNote"
       return <AddNote setCurrentPage={setCurrentPage} addNote={addNote} />
@@ -50,6 +56,14 @@ const App = () => {
     ]);
   };
 
+  const deleteNote = (id) => {
+    const deleteNote = noteList.filter((note) => {
+      return note.id !== id
+    })
+
+    setNoteList(deleteNote)
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', marginTop: 32 }}>  
       <CurrentPageWidget
@@ -58,6 +72,7 @@ const App = () => {
         setCurrentPage={setCurrentPage}
         // Berikan function addNote sebagai prop
         addNote={addNote}
+        deleteNote={deleteNote}
       />
     </SafeAreaView>
   );
